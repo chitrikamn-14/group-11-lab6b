@@ -48,3 +48,17 @@ void PWM_setup(void)
     PWM1_3_CTL_R |= 0x01;                   // Enable PWM generator 3
     PWM1_ENABLE_R |= 0x040;                 // Enable PWM output on PF2
 }
+
+// Main function
+void main(void)
+{
+    GPIO_PORTF_setup();                     // Initialize GPIO Port F
+    PWM_setup();                            // Initialize PWM
+    duty = 50;                              // Set initial duty cycle to 50%
+    PWM1_3_CMPA_R = (160 * duty) / 100;     // Set the duty cycle
+
+    while (1)
+    {
+        // Main loop, nothing to do as interrupts handle the logic
+    }
+}
