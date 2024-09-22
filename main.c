@@ -32,3 +32,19 @@ void GPIO_PORTF_setup(void)
     NVIC_PRI7_R &= 0xFF3FFFFF;              // Set priority for Port F interrupt
     NVIC_EN0_R |= 1 << 30;                  // Enable interrupt 30 (Port F)
 }
+
+
+// Setup for PWM Module
+void PWM_setup(void)
+{
+    SYSCTL_RCGCPWM_R |= (1 << 1);           // Enable clock for PWM module 1
+    GPIO_PORTF_AFSEL_R |= (1 << 2);         // Enable alternate function for PF2
+    GPIO_PORTF_PCTL_R |= 0x500;             // Set PF2 for PWM output
+
+    PWM1_3_CTL_R = 0x00;                    // Disable PWM generator 3 during setup
+    PWM1_3_GENA_R = 0x8C;                   // Configure output to be set when counting down and load is reached
+    PWM1_3_LOAD_R = 160;                    // Set period for PWM (adjust for desired frequency)
+    PWM1_3_CMPA_R = (duty / 100) * 160 - 1; // Set initial duty cycle
+    PWM1_3_CTL_R |= 0x01;                   // Enable PWM generator 3
+    PWM1_ENABLE_R |= 0x040;                 // Enable PWM output on PF2
+}
