@@ -62,3 +62,34 @@ void main(void)
         // Main loop, nothing to do as interrupts handle the logic
     }
 }
+
+// Interrupt handler for Port F, triggered by switch press
+void Portf_interrupt_handler(void)
+{
+    i = 0;
+
+    // Measure how long the switch is pressed by counting in a loop
+    while ((GPIO_PORTF_DATA_R & 0x01) == 0) {
+        i++;
+    }
+
+    // Handle switch 1 (PF4)
+    if (GPIO_PORTF_MIS_R & 0x10)
+    {
+        // Implement behavior for switch 1 if needed
+    }
+    // Handle switch 2 (PF0)
+    else if (GPIO_PORTF_MIS_R & 0x01)
+    {
+        // Long press on switch 2, decrease duty cycle by 5%
+        if (i >= 900000)
+        {
+            if (duty > 5)
+            {
+                duty -= 5;
+            }
+            else
+            {
+                duty = 5;
+            }
+        }
