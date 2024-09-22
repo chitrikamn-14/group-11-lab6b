@@ -93,3 +93,25 @@ void Portf_interrupt_handler(void)
                 duty = 5;
             }
         }
+    // Short press on switch 2, increase duty cycle by 5%
+        else if (i >= 0 && i <= 900000)
+        {
+            if (duty < 95)
+            {
+                duty += 5;
+            }
+            else
+            {
+                duty = 100;
+            }
+        }
+    }
+
+    PWM1_3_CMPA_R = (160 * duty) / 100;     // Update PWM duty cycle
+
+    // Simple delay for debounce
+    int j;
+    for (j = 0; j < 1600 * 100 / 4; j++) {}
+
+    GPIO_PORTF_ICR_R = 0x11;                // Clear interrupt flags for PF4 and PF0
+}
